@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Susurros del Bosque</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="main-menu">
+    <h1>🌲 Susurros del Bosque</h1>
+    <p>Una novela corta interactiva basada en historias tipo Booknet.</p>
+    <button onclick="startChapter(1)">📖 Iniciar Capítulo 1</button>
+    <button onclick="toggleAudio()">🔈 Música: <span id="audio-status">On</span></button>
+  </div>
+
+  <div id="chapter" class="hidden">
+    <div id="chapter-title"></div>
+    <div id="story-text"></div>
+    <div id="choices"></div>
+  </div>
+
+  <audio id="bg-music" loop autoplay>
+    <source src="https://cdn.pixabay.com/download/audio/2023/04/01/audio_4b4b20d654.mp3?filename=gentle-day-143154.mp3" type="audio/mp3">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

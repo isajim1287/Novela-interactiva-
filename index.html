@@ -1,29 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Susurros del Bosque</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HeroWorkout - Entrena como Deku</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: white;
+    }
+    header {
+      background-color: #007f5f;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5em;
+      color: #f9d342;
+    }
+    nav {
+      background-color: #004c3f;
+      display: flex;
+      justify-content: space-around;
+    }
+    nav button {
+      flex: 1;
+      padding: 1rem;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background-color: #006c52;
+    }
+    section {
+      display: none;
+      padding: 1rem;
+    }
+    section.active {
+      display: block;
+    }
+    .day, .ejercicio {
+      background-color: #1a1a1a;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-left: 4px solid #f9d342;
+      border-radius: 8px;
+    }
+    .cronometro {
+      text-align: center;
+      font-size: 2em;
+      margin: 1em 0;
+    }
+    .btn-crono {
+      font-size: 1em;
+      padding: 0.5em 1em;
+      margin: 0.5em;
+      background-color: #007f5f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-  <div id="main-menu">
-    <h1>🌲 Susurros del Bosque</h1>
-    <p>Una novela corta interactiva basada en historias tipo Booknet.</p>
-    <button onclick="startChapter(1)">📖 Iniciar Capítulo 1</button>
-    <button onclick="toggleAudio()">🔈 Música: <span id="audio-status">On</span></button>
-  </div>
+  <header>💪 HeroWorkout: Rutina de Deku</header>
+  <nav>
+    <button onclick="mostrar('inicio')">Inicio</button>
+    <button onclick="mostrar('rutina')">Rutina</button>
+    <button onclick="mostrar('ejercicios')">Ejercicios</button>
+    <button onclick="mostrar('cronometro')">Cronómetro</button>
+    <button onclick="mostrar('contacto')">Contacto</button>
+  </nav>
 
-  <div id="chapter" class="hidden">
-    <div id="chapter-title"></div>
-    <div id="story-text"></div>
-    <div id="choices"></div>
-  </div>
+  <section id="inicio" class="active">
+    <h2>¡Bienvenido!</h2>
+    <p>Entrena como un héroe con esta rutina basada en Deku de My Hero Academia. 💥</p>
+  </section>
 
-  <audio id="bg-music" loop autoplay>
-    <source src="https://cdn.pixabay.com/download/audio/2023/04/01/audio_4b4b20d654.mp3?filename=gentle-day-143154.mp3" type="audio/mp3">
-  </audio>
+  <section id="rutina">
+    <h2>Rutina Semanal</h2>
+    <div class="day"><strong>Lunes:</strong> Remo con M, Jalón dorsal, Remo sentado</div>
+    <div class="day"><strong>Martes:</strong> Remo T, Remo lateral con mancuerna, Hombros sentado</div>
+    <div class="day"><strong>Miércoles:</strong> Paralelas, Flexiones, Fondo de tríceps</div>
+    <div class="day"><strong>Jueves:</strong> Press de banca, Curl de bíceps, Elevaciones con mancuerna</div>
+    <div class="day"><strong>Viernes:</strong> Bicicleta 30 min, Sparrin 30 min, Cuerda 15 min, Burpees</div>
+    <div class="day"><strong>Sábado:</strong> Abdominales (varios), Calistenia 30 min</div>
+    <div class="day"><strong>Domingo:</strong> Hip Thrust, Peso muerto, Abductor, Prensa, Sentadillas en máquina, Elevación de pierna, Máquina cuádriceps</div>
+  </section>
 
-  <script src="script.js"></script>
+  <section id="ejercicios">
+    <h2>Ejercicios Destacados</h2>
+    <div class="ejercicio">🏋️‍♂️ Remo con mancuernas</div>
+    <div class="ejercicio">💪 Flexiones</div>
+    <div class="ejercicio">🔥 Burpees</div>
+    <div class="ejercicio">🚴 Bicicleta</div>
+    <div class="ejercicio">🦵 Sentadillas en máquina</div>
+    <div class="ejercicio">🥊 Sparring</div>
+  </section>
+
+  <section id="cronometro">
+    <h2>⏱ Cronómetro</h2>
+    <div class="cronometro" id="display">00:00</div>
+    <div style="text-align: center;">
+      <button class="btn-crono" onclick="iniciar()">Iniciar</button>
+      <button class="btn-crono" onclick="detener()">Detener</button>
+      <button class="btn-crono" onclick="reiniciar()">Reiniciar</button>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <p>¿Sugerencias? Contáctanos a:</p>
+    <p><strong>📧 entrenacondeku@app.com</strong></p>
+  </section>
+
+  <script>
+    function mostrar(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    let tiempo = 0;
+    let cronometro = null;
+
+    function actualizarDisplay() {
+      const min = String(Math.floor(tiempo / 60)).padStart(2, '0');
+      const seg = String(tiempo % 60).padStart(2, '0');
+      document.getElementById('display').textContent = `${min}:${seg}`;
+    }
+
+    function iniciar() {
+      if (cronometro) return;
+      cronometro = setInterval(() => {
+        tiempo++;
+        actualizarDisplay();
+      }, 1000);
+    }
+
+    function detener() {
+      clearInterval(cronometro);
+      cronometro = null;
+    }
+
+    function reiniciar() {
+      detener();
+      tiempo = 0;
+      actualizarDisplay();
+    }
+  </script>
 </body>
 </html>
